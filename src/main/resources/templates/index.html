@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Чат</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">Чат</a>
+        <a class="nav-link btn btn-success" sec:authorize="hasRole('ADMIN')" th:href="@{/admin}">Admin</a>
+        <form class="form-inline" method="post"  th:action="@{/logout}">
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Выход</button>
+        </form>
+    </nav>
+    <form th:action="@{/addMessage}" method="POST">
+        <div class="form-group">
+            <label for="text">Введите текст сообщения</label>
+            <textarea class="form-control" id="text" name="text" rows="2" maxlength="254"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="userId">Выберите получателя</label>
+            <select class="form-control" id="userId" name="userId">
+                <option
+                        th:each="user : ${users}"
+                        th:text="${user.username}"
+                        th:value="${user.id}">
+                </option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Отправить</button>
+    </form>
+    <div class="container p-0 border" style="height: 60vh; overflow: auto">
+        <div class="card" th:each="message : ${messages}">
+            <div class="card-header">
+                <span class="text-muted">from </span>
+                <b th:text="${message.author.username}"></b>
+                <span class="text-muted"> to </span>
+                <b th:text="${message.recipient.username}"></b>
+                <span class="text-muted float-right" th:text="${#temporals.format(message.time,'yyyy.MM.dd HH:mm:ss')}"></span>
+            </div>
+            <div class="card-body">
+                <p class="card-text"  th:text="${message.text}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

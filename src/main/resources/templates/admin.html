@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand">Чат</a>
+        <a class="nav-link btn btn-success" th:href="@{/index}">Чат</a>
+        <form class="form-inline" method="post"  th:action="@{/logout}">
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Выход</button>
+        </form>
+    </nav>
+    <h5>Пользователи</h5>
+    <div class="container p-0 border" style="height: 40vh; overflow: auto">
+        <table class="table border">
+            <thead class="thead-light border">
+            <tr>
+                <th class="w-25">ID</th>
+                <th class="w-50">Username</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tr th:each="user : ${users}">
+                <form th:action="@{/admin/editUsername}" method="POST">
+                <td>
+                    <b th:text="${user.id}"></b>
+                    <span th:if="${!user.enabled}" class="text-muted">(deleted)</span>
+                </td>
+                <td>
+                    <input type="hidden" name="userId" th:value="${user.id}">
+                    <input type="text" class="form-control" name="newUsername" th:value="${user.username}" pattern="[0-9A-Za-zА-Яа-яЁё]{1,250}">
+
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-info btn-sm">Edit</button>
+                    <a th:if="${user.enabled}" class="btn btn-danger btn-sm" th:href="@{'/admin/deleteUser/'+ ${user.id}}">Delete</a>
+                    <a th:if="${!user.enabled}" class="btn btn-primary btn-sm" th:href="@{'/admin/restoreUser/'+ ${user.id}}">Restore</a>
+                </td>
+                </form>
+            </tr>
+        </table>
+    </div>
+    <h5>Сообщения</h5>
+    <div class="container p-0 border" style="height: 40vh; overflow: auto">
+        <div class="card" th:each="message : ${messages}">
+            <form th:action="@{/admin/editMessage}" method="POST">
+            <div class="card-header">
+                <span class="text-muted">from </span>
+                <b th:text="${message.author.username}"></b>
+                <span class="text-muted"> to </span>
+                <b th:text="${message.recipient.username}"></b>
+                <a class="btn btn-danger btn-sm float-right" th:href="@{'/admin/deleteMessage/'+ ${message.id}}">Delete</a>
+                <button type="submit" class="btn btn-info btn-sm float-right">Edit</button>
+                <span class="text-muted float-right" th:text="${#temporals.format(message.time,'yyyy.MM.dd HH:mm:ss')}"></span>
+            </div>
+            <div class="card-body">
+                <input type="hidden" name="messageId" th:value="${message.id}">
+                <textarea class="form-control" name="newMessage" rows="2" maxlength="254" th:text="${message.text}"></textarea>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-header">Регистрация</div>
+        <div class="alert alert-danger text-center" th:if="${UserExistsInfo}" th:text="${UserExistsInfo}"></div>
+        <div class="card-body">
+            <form th:action="@{/registration}" method="POST">
+                <div class="form-group row">
+                    <label for="username" class="col-md-4 col-form-label text-md-right">Логин</label>
+                    <div class="col-md-6">
+                        <input type="text" id="username" class="form-control" name="username" pattern="[0-9A-Za-zА-Яа-яЁё]{1,250}" autofocus>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-md-4 col-form-label text-md-right">Пароль</label>
+                    <div class="col-md-6">
+                        <input type="text" id="password" class="form-control" name="password" pattern="[0-9A-Za-zА-Яа-яЁё]{1,250}">
+                    </div>
+                </div>
+                <div class="col-md-6 offset-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        Зарегестрироваться
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
