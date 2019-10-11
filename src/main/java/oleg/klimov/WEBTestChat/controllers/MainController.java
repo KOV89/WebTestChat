@@ -33,10 +33,10 @@ public class MainController {
 
     @PostMapping("/addMessage")
     public String addMessage(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal User author,
             @RequestParam(value = "text") String text,
-            @RequestParam(value = "userId") Long userId) {
-        messageService.newMessage(user, text, userService.findById(userId));
+            @RequestParam(value = "recipient") User recipient) {
+        messageService.newMessage(author, text, recipient);
         return "redirect:/index";
     }
 }
